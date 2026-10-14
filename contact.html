@@ -1,0 +1,508 @@
+<!-- CONTACT US.HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ecddc5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: auto;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><text y="32" font-size="32">👨‍🍳</text></svg>') 16 16, auto;
+        }
+
+        #emoji-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .emoji-item {
+            position: absolute;
+            font-size: 40px;
+            pointer-events: none;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+            user-select: none;
+        }
+
+        .container {
+            background-color: #f8f0e5;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            max-width: 1100px;
+            width: 100%;
+            padding: 50px;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.1s ease-out;
+        }
+
+        .card {
+            display: flex;
+            gap: 50px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.5rem;
+            color: #5c3b2f;
+            transition: all 0.3s ease;
+        }
+        
+        h2:hover {
+            transform: scale(1.05);
+            color: #c9a66b;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: #6d5643;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #4b3621;
+        }
+
+        .left {
+            flex: 1;
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #efe1d3;
+            outline: none;
+            background: #fff;
+            color: #272523;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+        }
+
+        form input:focus,
+        form textarea:focus {
+            border-color: #c9a66b;
+            background: #fff7ec;
+            box-shadow: 0 0 10px rgba(92, 59, 47, 0.2);
+            transform: scale(1.02);
+        }
+
+        form input.highlight,
+        form textarea.highlight {
+            background: #e8d5bb;
+            box-shadow: 0 0 10px rgba(92, 59, 47, 0.3);
+            transform: scale(1.02);
+        }
+
+        form textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #c9a66b;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #b38850;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            color: #5c3b2f;
+            border-radius: 10px;
+            min-height: 50px;
+            text-align: center;
+            font-style: italic;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .right {
+            flex: 1;
+        }
+
+        .info {
+            margin-top: 25px;
+        }
+
+        .info .item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .info .item:hover {
+            background: #fff8f0;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .info .item strong {
+            font-size: 1.1rem;
+            color: #5c3b2f;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info .item p {
+            font-size: 1rem;
+            color: #4b3621;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                flex-direction: column;
+            }
+            
+            .emoji-item {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="emoji-field"></div>
+
+    <section class="container">
+        <h2>Contact Us</h2>
+        
+        <div class="card">
+            <div class="left">
+                <h3>Fill the form</h3>
+
+                <form id="contactForm">
+                    <input type="text" id="name" placeholder="Name" required>
+                    <input type="email" id="email" placeholder="Email Address" required>
+                    <textarea id="message" placeholder="Message" required></textarea>
+                    <button type="submit" class="btn" id="submitBtn">Submit</button>
+                </form>
+
+                <div id="output">
+                    Output will appear here...
+                </div>
+            </div>
+
+            <div class="right">
+                <p>
+                    Whether you have questions about our services, need support, or 
+                    want to leave your feedback, our dedicated team is here to help.
+                </p>
+
+                <div class="info">
+                    <div class="item" data-info="email">
+                        <strong>📧 Email</strong>
+                        <p>dearbakery@gmail.com</p>
+                    </div>
+
+                    <div class="item" data-info="website">
+                        <strong>🌐 Website</strong>
+                        <p>www.dearbakery.com</p>
+                    </div>
+
+                    <div class="item" data-info="phone">
+                        <strong>📞 Phone</strong>
+                        <p>0888 9999 8888</p>
+                    </div>
+
+                    <div class="item" data-info="location">
+                        <strong>📍 Location</strong>
+                        <p>Cengkareng, West Java</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const emojiField = document.getElementById('emoji-field');
+            const container = document.querySelector('.container');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            const form = document.getElementById('contactForm');
+            const outputDiv = document.getElementById('output');
+            
+            const bakeryEmojis = ['🍪', '🍩', '🍰', '🥐', '🍞', '🥖'];
+            const numberOfEmojis = 15;
+            const emojis = [];
+            const followFactor = 0.05;
+            
+            let targetX = window.innerWidth / 2;
+            let targetY = window.innerHeight / 2;
+
+            // Create emojis
+            for (let i = 0; i < numberOfEmojis; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji-item';
+                emoji.textContent = bakeryEmojis[Math.floor(Math.random() * bakeryEmojis.length)];
+                
+                const initialX = Math.random() * (window.innerWidth - 100) + 50;
+                const initialY = Math.random() * (window.innerHeight - 100) + 50;
+                
+                emoji.style.left = `${initialX}px`;
+                emoji.style.top = `${initialY}px`;
+                
+                emoji.currentX = initialX;
+                emoji.currentY = initialY;
+                emoji.depth = Math.random() * 2 + 0.5;
+                emoji.scale = 1 / emoji.depth;
+
+                emojiField.appendChild(emoji);
+                emojis.push(emoji);
+            }
+
+            // EVENT 1: MOUSEMOVE - Emoji animation
+            document.addEventListener('mousemove', (event) => {
+                targetX = event.clientX;
+                targetY = event.clientY;
+                
+                const moveX = (event.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (event.clientY - window.innerHeight / 2) * 0.01;
+                container.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                
+                console.log('🖱️ Mousemove (Vanilla JS): Cursor at X=' + event.clientX);
+            });
+            
+            function animate() {
+                emojis.forEach(emoji => {
+                    const rect = emoji.getBoundingClientRect();
+                    const emojiCenterX = rect.left + rect.width / 2;
+                    const emojiCenterY = rect.top + rect.height / 2;
+
+                    const dx = targetX - emojiCenterX;
+                    const dy = targetY - emojiCenterY;
+
+                    emoji.currentX += dx * followFactor * emoji.depth * 0.5;
+                    emoji.currentY += dy * followFactor * emoji.depth * 0.5;
+
+                    emoji.style.transform = `
+                        translate(${emoji.currentX - rect.left}px, ${emoji.currentY - rect.top}px) 
+                        scale(${emoji.scale})
+                        rotate(${Math.sin(emoji.currentX / 500) * 10}deg)
+                    `;
+                });
+
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+
+            function showOutput(message) {
+                outputDiv.innerHTML = message;
+            }
+
+            // EVENT 2: CLICK - Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const message = messageInput.value.trim();
+                
+                console.log('🖱️ Click event (Vanilla JS): Form submitted by ' + name);
+                
+                if (name && email && message) {
+                    showOutput(`✔ Form submitted! Thank you, ${name}!`);
+                    alert('✅ Message sent successfully!\n\nThank you for contacting us, ' + name + '!\nWe will respond to ' + email + ' within 24 hours.');
+                    this.reset();
+                } else {
+                    showOutput('⚠ Please fill in all fields!');
+                }
+            });
+
+            // EVENT 3: KEYPRESS - Typing feedback
+            document.addEventListener('keypress', function() {
+                console.log('⌨️ Keypress event (Vanilla JS): Typing...');
+                showOutput("⌨ Typing...");
+
+                clearTimeout(window.typingTimer);
+                window.typingTimer = setTimeout(() => {
+                    showOutput("Output will appear here...");
+                }, 1500);
+            });
+
+            // EVENT 4: FOCUS - Input highlighting
+            nameInput.addEventListener('focus', function() {
+                console.log('🎯 Focus event (Vanilla JS): Name input focused');
+                this.classList.add('highlight');
+                showOutput("📝 Name input is focused!");
+            });
+
+            nameInput.addEventListener('blur', function() {
+                this.classList.remove('highlight');
+            });
+
+            emailInput.addEventListener('focus', function() {
+                console.log('🎯 Focus event (Vanilla JS): Email input focused');
+                this.classList.add('highlight');
+                showOutput("📧 Email input is focused!");
+            });
+
+            emailInput.addEventListener('blur', function() {
+                this.classList.remove('highlight');
+            });
+
+            messageInput.addEventListener('focus', function() {
+                console.log('🎯 Focus event (Vanilla JS): Message textarea focused');
+                this.classList.add('highlight');
+                showOutput("💬 Message textarea is focused!");
+            });
+
+            messageInput.addEventListener('blur', function() {
+                this.classList.remove('highlight');
+            });
+
+            // EVENT 5: CHANGE - Email validation
+            emailInput.addEventListener('change', function() {
+                const email = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                console.log('🔄 Change event (Vanilla JS): Email = ' + email);
+                
+                if (email && !emailRegex.test(email)) {
+                    showOutput("📧 ⚠️ Invalid email format!");
+                    this.style.borderColor = '#e74c3c';
+                } else if (email) {
+                    showOutput("📧 ✅ Email looks good!");
+                    this.style.borderColor = '#27ae60';
+                } else {
+                    this.style.borderColor = '#efe1d3';
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                targetX = window.innerWidth / 2;
+                targetY = window.innerHeight / 2;
+            });
+        });
+
+        // ========================================
+        // JQUERY EVENTS
+        // ========================================
+        $(document).ready(function() {
+            console.log('✅ Contact Us Page - jQuery Loaded!');
+
+            // jQuery CLICK - Info items
+            $('.info .item').on('click', function() {
+                const infoType = $(this).data('info');
+                const text = $(this).find('p').text();
+                
+                console.log('🖱️ Click event (jQuery): ' + infoType + ' clicked');
+                
+                $('#output').html('📋 Copied: ' + text);
+                
+                $(this).css({
+                    'background-color': '#fff8e1',
+                    'transform': 'scale(1.05)'
+                });
+                
+                setTimeout(() => {
+                    $(this).css({
+                        'background-color': '#fff',
+                        'transform': 'scale(1)'
+                    });
+                }, 500);
+            });
+
+            // jQuery MOUSEMOVE - Heading animation
+            $('h2').on('mouseenter', function() {
+                console.log('🖱️ Mousemove event (jQuery): Heading hovered');
+                $(this).css({
+                    'transform': 'scale(1.1) rotate(2deg)',
+                    'text-shadow': '0 0 15px rgba(201, 166, 107, 0.5)'
+                });
+            }).on('mouseleave', function() {
+                $(this).css({
+                    'transform': 'scale(1) rotate(0)',
+                    'text-shadow': 'none'
+                });
+            });
+
+            // jQuery KEYPRESS - Character count
+            let totalChars = 0;
+            $('input, textarea').on('keypress', function() {
+                totalChars++;
+                console.log('⌨️ Keypress event (jQuery): Total characters typed = ' + totalChars);
+            });
+
+            // jQuery FOCUS - Field animation
+            $('input, textarea').on('focus', function() {
+                console.log('🎯 Focus event (jQuery): ' + $(this).attr('id') + ' focused');
+                
+                $(this).parent().css('background-color', '#fff8f0');
+            }).on('blur', function() {
+                $(this).parent().css('background-color', '');
+            });
+
+            // jQuery CHANGE - Name validation
+            $('#name').on('change', function() {
+                const name = $(this).val().trim();
+                console.log('🔄 Change event (jQuery): Name = ' + name);
+                
+                if (name.length < 2) {
+                    $('#output').html('⚠️ Name too short!');
+                } else {
+                    $('#output').html('✅ Hello, ' + name + '!');
+                }
+            });
+
+            // Button hover effect
+            $('.btn').hover(
+                function() {
+                    $(this).css('box-shadow', '0 6px 20px rgba(201, 166, 107, 0.4)');
+                },
+                function() {
+                    $(this).css('box-shadow', 'none');
+                }
+            );
+        });
+    </script>
+</body>
+</html>

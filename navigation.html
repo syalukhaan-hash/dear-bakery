@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation - Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {padding: 0;}
+        
+        .nav-container {
+            width: 100%;
+            margin: 0;
+            padding: 15px 40px;
+            background-color: #5c3b2f;
+            color: #fdf9f3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 2.5em;
+            font-weight: normal;
+            color: #c9a66b;
+            text-decoration: none;
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: inline-block;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+            color: #e8dcc8;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .main-nav li {
+            margin-left: 15px;
+        }
+
+        .main-nav a {
+            color: #fdf9f3;
+            text-decoration: none;
+            font-weight: normal;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .main-nav a:hover {
+            background-color: #c9a66b;
+            color: #fdf9f3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(201, 166, 107, 0.4);
+        }
+
+        .main-nav a.active {
+            background-color: #c9a66b;
+            box-shadow: 0 2px 8px rgba(201, 166, 107, 0.3);
+        }
+
+        /* Mousemove parallax effect indicator */
+        .parallax-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(201, 166, 107, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #fdf9f3;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .main-nav ul {
+                flex-wrap: wrap;
+            }
+            
+            .main-nav li {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax-indicator" id="parallaxInfo">Moving...</div>
+    
+    <div class="nav-container">
+        <a href="home.html" target="contentFrame" class="logo">Dear Bakery</a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="home.html" target="contentFrame" data-page="home">Home</a></li>
+                <li><a href="menu.html" target="contentFrame" data-page="menu">Menu</a></li>
+                <li><a href="about.html" target="contentFrame" data-page="about">About Us</a></li>
+                <li><a href="order.html" target="contentFrame" data-page="order">Order</a></li>
+                <li><a href="review.html" target="contentFrame" data-page="review">Reviews</a></li>
+                <li><a href="contact.html" target="contentFrame" data-page="contact">Contact Us</a></li>
+                <li><a href="login.html" target="contentFrame" data-page="login">Login</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const navContainer = document.querySelector('.nav-container');
+            const navLinks = document.querySelectorAll('.main-nav a');
+            const logo = document.querySelector('.logo');
+            const parallaxInfo = document.getElementById('parallaxInfo');
+
+            // EVENT 1: MOUSEMOVE - Subtle parallax effect
+            document.addEventListener('mousemove', function(e) {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+                
+                navContainer.style.transform = 'none';
+                
+                // Show indicator briefly
+                parallaxInfo.style.opacity = '1';
+                clearTimeout(window.parallaxTimer);
+                window.parallaxTimer = setTimeout(() => {
+                    parallaxInfo.style.opacity = '0';
+                }, 1000);
+            });
+
+            // EVENT 2: CLICK - Active state management
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    console.log('🖱️ Click event (Vanilla JS): ' + this.textContent);
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Store active page
+                    const page = this.getAttribute('data-page');
+                    localStorage.setItem('activePage', page);
+                });
+            });
+
+            // EVENT 3: KEYPRESS - Keyboard navigation
+            document.addEventListener('keypress', function(e) {
+                if (e.key >= '1' && e.key <= '7') {
+                    const index = parseInt(e.key) - 1;
+                    if (navLinks[index]) {
+                        console.log('⌨️ Keypress event (Vanilla JS): Key ' + e.key);
+                        navLinks[index].click();
+                    }
+                }
+            });
+
+            // EVENT 4: FOCUS - Logo focus state
+            logo.addEventListener('focus', function() {
+                console.log('🎯 Focus event (Vanilla JS): Logo focused');
+                this.style.outline = '2px solid #e8dcc8';
+            });
+
+            logo.addEventListener('blur', function() {
+                this.style.outline = 'none';
+            });
+
+            // Restore active page on load
+            const activePage = localStorage.getItem('activePage');
+            if (activePage) {
+                const activeLink = document.querySelector(`[data-page="${activePage}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        });
+
+        // ========================================
+        // JQUERY EVENTS
+        // ========================================
+        $(document).ready(function() {
+            console.log('✅ Navigation - jQuery Loaded!');
+
+            // EVENT 5: CHANGE - Theme toggle (simulated)
+            let isDarkMode = false;
+            $('.logo').on('dblclick', function() {
+                console.log('🎨 Change event (jQuery): Theme toggle');
+                isDarkMode = !isDarkMode;
+                
+                if (isDarkMode) {
+                    $('.nav-container').css('background-color', '#3a2520');
+                } else {
+                    $('.nav-container').css('background-color', '#5c3b2f');
+                }
+            });
+
+            // jQuery hover effects enhancement
+            $('.main-nav a').hover(
+                function() {
+                    $(this).css('transform', 'translateY(-2px) scale(1.05)');
+                },
+                function() {
+                    if (!$(this).hasClass('active')) {
+                        $(this).css('transform', 'translateY(0) scale(1)');
+                    }
+                }
+            );
+
+            // jQuery click logging
+            $('.main-nav a').on('click', function() {
+                console.log('🖱️ Click event (jQuery): ' + $(this).text());
+            });
+
+            // Logo animation on hover
+            $('.logo').on('mouseenter', function() {
+                $(this).css({
+                    'transform': 'scale(1.1) rotate(2deg)',
+                    'text-shadow': '0 0 10px rgba(201, 166, 107, 0.5)'
+                });
+            }).on('mouseleave', function() {
+                $(this).css({
+                    'transform': 'scale(1) rotate(0deg)',
+                    'text-shadow': 'none'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

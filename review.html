@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review - Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">⭐</text></svg>'), auto;
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        h2:hover {
+            transform: scale(1.1);
+            color: #c9a66b;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6d5643;
+            margin-bottom: 40px;
+            font-style: italic;
+            transition: all 0.3s ease;
+        }
+        
+        .subtitle:hover {
+            color: #c9a66b;
+            transform: scale(1.05);
+        }
+
+        .review {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .review-card {
+            background-color: #fdf9f3;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .review-card.selected {
+            border: 3px solid #c9a66b;
+            background-color: #fff8e1;
+        }
+
+        .stars {
+            color: #c9a66b;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stars:hover {
+            transform: scale(1.2);
+        }
+        
+        .stars i {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .stars i:hover {
+            transform: scale(1.3);
+            color: #e8b339;
+        }
+
+        .review-text {
+            font-style: italic;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .review-text:hover {
+            color: #5c3b2f;
+            font-size: 1.05rem;
+        }
+
+        .reviewer {
+            font-weight: bold;
+            color: #5c3b2f;
+            border-top: 1px dashed #e8dcc8;
+            padding-top: 12px;
+            margin-top: 15px;
+            text-align: right;
+            transition: all 0.3s ease;
+        }
+        
+        .reviewer:hover {
+            color: #c9a66b;
+            border-top-color: #c9a66b;
+        }
+        
+        .filter-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            background-color: #c9a66b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: #b08e5a;
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active {
+            background-color: #5c3b2f;
+        }
+        
+        .like-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #c9a66b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Customer Reviews</h2>
+    <p class="subtitle">Sweet words from dear friends</p>
+    
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All Reviews</button>
+        <button class="filter-btn" data-filter="5">5 Stars</button>
+        <button class="filter-btn" data-filter="4">4+ Stars</button>
+    </div>
+    
+    <div class="review">
+        <div class="review-card" data-rating="5">
+            <div class="like-count">❤️ <span class="count">0</span></div>
+            <div class="stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <p class="review-text">
+                The Cromboloni is a game-changer! Crispy outside, soft inside, and filled with just the right amount of cream. I come back every weekend!
+            </p>
+            <div class="reviewer">— Sarah L.</div>
+        </div>
+
+        <div class="review-card" data-rating="5">
+            <div class="like-count">❤️ <span class="count">0</span></div>
+            <div class="stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <p class="review-text">
+                The croissants are the best I've ever had! So flaky and buttery. I come here every weekend.
+            </p>
+            <div class="reviewer">— John D.</div>
+        </div>
+        
+        <div class="review-card" data-rating="4.5">
+            <div class="like-count">❤️ <span class="count">0</span></div>
+            <div class="stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-alt"></i>
+            </div>
+            <p class="review-text">
+                Ordered a custom cake for my daughter's birthday. Not only did it look stunning, but it tasted even better. Thank you, Dear Bakery!
+            </p>
+            <div class="reviewer">— Michael T.</div>
+        </div>
+
+        <div class="review-card" data-rating="4.5">
+            <div class="like-count">❤️ <span class="count">0</span></div>
+            <div class="stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-alt"></i>
+            </div>
+            <p class="review-text">
+                Best cheesecake I've ever tasted! Rich, creamy, and not too sweet. The graham cracker crust is perfectly crunchy. My new go-to spot for desserts!
+            </p>
+            <div class="reviewer">— Abigail S.</div>
+        </div>
+        
+        <div class="review-card" data-rating="5">
+            <div class="like-count">❤️ <span class="count">0</span></div>
+            <div class="stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <p class="review-text">
+                Their Shredded Beef Roll Cake is surprisingly delicious! Savory, flaky, and perfect for lunch. A hidden gem in the menu.
+            </p>
+            <div class="reviewer">— Aisha R.</div>
+        </div>
+
+        <div class="review-card" data-rating="5">
+            <div class="like-count">❤️ <span class="count">0</span></div>
+            <div class="stars">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+            <p class="review-text">
+                Dear Bakery feels like home. The staff is kind, and everything tastes fresh and delicious!
+            </p>
+            <div class="reviewer">— Emma R.</div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const reviewCards = document.querySelectorAll('.review-card');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const stars = document.querySelectorAll('.stars i');
+            const reviewSection = document.querySelector('.review');
+
+            // EVENT 1: MOUSEMOVE - Card tilt effect
+            reviewCards.forEach(card => {
+                card.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+                    
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+                    
+                    console.log('🖱️ Mousemove: Card tilt effect');
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+
+            // EVENT 2: CLICK - Like review
+            reviewCards.forEach(card => {
+                const likeCount = card.querySelector('.count');
+                let likes = 0;
+                
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('fa-star')) {
+                        likes++;
+                        likeCount.textContent = likes;
+                        
+                        console.log('🖱️ Click event (Vanilla JS): Review liked, total: ' + likes);
+                        
+                        this.classList.toggle('selected');
+                        
+                        // Animation
+                        const likeElement = this.querySelector('.like-count');
+                        likeElement.style.transform = 'scale(1.5)';
+                        setTimeout(() => {
+                            likeElement.style.transform = 'scale(1)';
+                        }, 300);
+                    }
+                });
+            });
+
+            // EVENT 3: KEYPRESS - Filter reviews
+            document.addEventListener('keypress', function(e) {
+                console.log('⌨️ Keypress event (Vanilla JS): ' + e.key);
+                
+                if (e.key === 'a') {
+                    reviewCards.forEach(card => card.style.display = '');
+                } else if (e.key === '5') {
+                    reviewCards.forEach(card => {
+                        const rating = parseFloat(card.getAttribute('data-rating'));
+                        card.style.display = rating === 5 ? '' : 'none';
+                    });
+                } else if (e.key === '4') {
+                    reviewCards.forEach(card => {
+                        const rating = parseFloat(card.getAttribute('data-rating'));
+                        card.style.display = rating >= 4 ? '' : 'none';
+                    });
+                }
+            });
+
+            // EVENT 4: FOCUS - Review card focus
+            reviewCards.forEach((card, index) => {
+                card.setAttribute('tabindex', '0');
+                
+                card.addEventListener('focus', function() {
+                    console.log('🎯 Focus event (Vanilla JS): Review card ' + (index + 1) + ' focused');
+                    this.style.outline = '3px solid #c9a66b';
+                    this.style.outlineOffset = '5px';
+                });
+
+                card.addEventListener('blur', function() {
+                    this.style.outline = 'none';
+                });
+            });
+
+            // EVENT 5: CHANGE - Filter button state
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('🔄 Change event (Vanilla JS): Filter changed to ' + this.textContent);
+                    
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    
+                    reviewCards.forEach(card => {
+                        const rating = parseFloat(card.getAttribute('data-rating'));
+                        
+                        if (filter === 'all') {
+                            card.style.display = '';
+                        } else if (filter === '5') {
+                            card.style.display = rating === 5 ? '' : 'none';
+                        } else if (filter === '4') {
+                            card.style.display = rating >= 4 ? '' : 'none';
+                        }
+                    });
+                });
+            });
+        });
+
+        // ========================================
+        // JQUERY EVENTS
+        // ========================================
+        $(document).ready(function() {
+            console.log('✅ Review Page - jQuery Loaded!');
+
+            // jQuery CLICK - Star rating interaction
+            $('.stars i').on('click', function(e) {
+                e.stopPropagation();
+                console.log('🖱️ Click event (jQuery): Star clicked');
+                
+                $(this).css({
+                    'transform': 'scale(1.5) rotate(360deg)',
+                    'color': '#e8b339'
+                });
+                
+                setTimeout(() => {
+                    $(this).css({
+                        'transform': 'scale(1) rotate(0deg)',
+                        'color': '#c9a66b'
+                    });
+                }, 500);
+            });
+
+            // jQuery MOUSEMOVE - Section parallax
+            $('.review').on('mousemove', function(e) {
+                const x = e.pageX - $(this).offset().left;
+                const y = e.pageY - $(this).offset().top;
+                
+                const moveX = (x - $(this).width() / 2) * 0.01;
+                const moveY = (y - $(this).height() / 2) * 0.01;
+                
+                $(this).css('transform', `translate(${moveX}px, ${moveY}px)`);
+            });
+
+            // jQuery KEYPRESS - Quick navigation
+            $(document).on('keypress', function(e) {
+                if (e.key === 'h') {
+                    console.log('⌨️ Keypress event (jQuery): Scroll to top');
+                    $('html, body').animate({ scrollTop: 0 }, 300);
+                } else if (e.key === 'b') {
+                    console.log('⌨️ Keypress event (jQuery): Scroll to bottom');
+                    $('html, body').animate({ scrollTop: $(document).height() }, 300);
+                }
+            });
+
+            // jQuery FOCUS - Reviewer name emphasis
+            $('.reviewer').each(function() {
+                $(this).attr('tabindex', '0');
+            });
+            
+            $('.reviewer').on('focus', function() {
+                console.log('🎯 Focus event (jQuery): Reviewer focused');
+                $(this).css({
+                    'font-size': '1.2rem',
+                    'color': '#c9a66b',
+                    'border-top': '2px solid #c9a66b'
+                });
+            }).on('blur', function() {
+                $(this).css({
+                    'font-size': '1rem',
+                    'color': '#5c3b2f',
+                    'border-top': '1px dashed #e8dcc8'
+                });
+            });
+
+            // jQuery CHANGE - Text highlighting
+            $('.review-text').on('dblclick', function() {
+                console.log('🔄 Change event (jQuery): Review text toggled');
+                
+                if ($(this).css('background-color') === 'rgb(255, 248, 225)') {
+                    $(this).css({
+                        'background-color': '',
+                        'padding': '',
+                        'border-radius': ''
+                    });
+                } else {
+                    $(this).css({
+                        'background-color': '#fff8e1',
+                        'padding': '10px',
+                        'border-radius': '5px'
+                    });
+                }
+            });
+
+            // Heading animation
+            $('h2').on('mouseenter', function() {
+                $(this).css({
+                    'transform': 'scale(1.15) rotate(3deg)',
+                    'text-shadow': '0 0 20px rgba(201, 166, 107, 0.5)'
+                });
+            }).on('mouseleave', function() {
+                $(this).css({
+                    'transform': 'scale(1) rotate(0)',
+                    'text-shadow': 'none'
+                });
+            });
+
+            // Filter button hover effects
+            $('.filter-btn').hover(
+                function() {
+                    $(this).css('box-shadow', '0 5px 15px rgba(201, 166, 107, 0.4)');
+                },
+                function() {
+                    $(this).css('box-shadow', 'none');
+                }
+            );
+        });
+    </script>
+</body>
+</html>

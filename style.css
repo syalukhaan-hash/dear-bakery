@@ -1,0 +1,163 @@
+/* GLOBAL STYLES */
+body {
+    background-color: #f8f0e5;          /* Background Properties */
+    font-family: 'Georgia', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* BACKGROUND PROPERTIES */
+.top-section {
+    background-image: url(images/bakery.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    image-rendering: crisp-edges;
+}
+
+/* TEXT & FONT PROPERTIES */
+h1 {
+    font-size: 3rem;
+    text-align: center;
+}
+
+h2 {
+    font-family: 'Georgia', serif;
+    font-size: 2.2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #5c3b2f;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    line-height: 1.3;
+}
+
+h3 {
+    font-family: 'Georgia', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #6d5643;
+    text-decoration: none;
+}
+
+/* DIMENSION PROPERTIES */
+.container, .form-container {
+    max-width: 800px;
+    min-width: 300px;
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+/* POSITIONING PROPERTIES */
+.nav-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+/* BUTTON STYLE */
+.btn, .submit-btn, .login-button {
+    background-color: #c9a66b;
+    color: #fdf9f3;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn:hover, .submit-btn:hover, .login-button:hover {
+    background-color: #b08e5a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(201, 166, 107, 0.4);
+}
+
+/* FORM STYLE */
+.form-group {
+    margin-bottom: 20px; /* Dimension Properties */
+    text-align: left;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d8c9b3;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fdf9f3;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #c9a66b;
+    box-shadow: 0 0 0 3px rgba(201, 166, 107, 0.2);
+}
+
+/* STARTS RATING */
+.stars {
+  color: #c9a66b;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+
+/* FOOTER */
+footer {
+    background-color: #5c3b2f; /* Background Properties */
+    color: #fdf9f3; /* Text and Font Properties */
+    text-align: center; /* Text and Font Properties */
+    padding: 20px; /* Dimension Properties */
+    margin-top: 50px; /* Dimension Properties */
+    font-size: 0.9em; /* Text and Font Properties */
+}
+
+/* DECORATIVE LINE UNDER HEADINGS */
+h2:after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #c9a66b;
+    margin: 12px auto;
+    border-radius: 2px;
+}
+
+/* RADIO & CHECKBOX GROUPS */
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 8px;
+}
+
+.radio-option,
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.radio-option input,
+.checkbox-option input {
+    width: auto;
+    margin: 0;
+    accent-color: #c9a66b;
+}

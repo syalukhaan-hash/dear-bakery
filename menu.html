@@ -1,0 +1,381 @@
+<!-- MENU.HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: #fdf9f3;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">🍰</text></svg>'), auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        h2:hover {
+            transform: scale(1.05);
+        }
+
+        table {
+            background-color: #f8f0e5;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background-color: #c9a66b;
+            color: #fdf9f3;
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:hover {
+            background-color: #fff8f0;
+            transform: scale(1.02);
+        }
+        
+        tr {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+            float: left;
+            margin-right: 15px;
+            border: 1px solid #eee;
+            transition: transform 0.3s ease;
+        }
+        
+        tr:hover .item-image {
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .item-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 0 8px 0;
+            color: #5c3b2f;
+        }
+        
+        .item-desc {
+            margin: 0;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: #c9a66b;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .search-box {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            text-align: center;
+        }
+        
+        .search-box input {
+            width: 300px;
+            padding: 10px;
+            border: 2px solid #c9a66b;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(201, 166, 107, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            .item-image {
+                width: 80px;
+                height: 80px;
+            }
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.95rem;
+            }
+            .price {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Our Menu</h2>
+    
+    <div class="search-box">
+        <input type="text" id="menuSearch" placeholder="🔍 Search menu items...">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Menu</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-item="cheesecake">
+                <td>
+                    <img src="images/cheesecake.jpg" alt="Cheesecake" class="item-image">
+                    <p class="item-name">Cheesecake</p>
+                    <p class="item-desc">Vivamus quis quam eget magna ornare ultricies non et erat.</p>
+                </td>
+                <td class="price">Rp. 20.000 / slice</td>
+            </tr>
+            <tr data-item="croissant">
+                <td>
+                    <img src="images/croissant.jpg" alt="Croissant" class="item-image">
+                    <p class="item-name">Croissant</p>
+                    <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </td>
+                <td class="price">Rp. 25.000 / slice</td>
+            </tr>
+            <tr data-item="cromboloni">
+                <td>
+                    <img src="images/cromboloni.jpg" alt="Cromboloni" class="item-image">
+                    <p class="item-name">Cromboloni</p>
+                    <p class="item-desc">Praesent maximus massa vel magna ultrices, vel ornare massa mattis.</p>
+                </td>
+                <td class="price">Rp. 15.000 / slice</td>
+            </tr>
+            <tr data-item="cookie-bomb">
+                <td>
+                    <img src="images/cookie_bomb.jpg" alt="Cookies Bomb" class="item-image">
+                    <p class="item-name">Cookies Bomb</p>
+                    <p class="item-desc">Suspendisse efficitur neque in nunc facilisis viverra.</p>
+                </td>
+                <td class="price">Rp. 30.000 / slice</td>
+            </tr>
+            <tr data-item="beef-roll">
+                <td>
+                    <img src="images/beefrollcake.jpg" alt="Shredded Beef Roll Cake" class="item-image">
+                    <p class="item-name">Shredded Beef Roll Cake</p>
+                    <p class="item-desc">Nullam tempus massa nec orci ultrices rhoncus a at tellus.</p>
+                </td>
+                <td class="price">Rp. 17.000 / slice</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuRows = document.querySelectorAll('tbody tr');
+            const searchInput = document.getElementById('menuSearch');
+            const table = document.querySelector('table');
+
+            // EVENT 1: MOUSEMOVE - Table tilt effect
+            table.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 50;
+                const rotateY = (centerX - x) / 50;
+                
+                this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                
+                console.log('🖱️ Mousemove: Table tilt effect');
+            });
+
+            table.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+
+            // EVENT 2: CLICK - Menu item selection
+            menuRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    const itemName = this.querySelector('.item-name').textContent;
+                    const price = this.querySelector('.price').textContent;
+                    
+                    console.log('🖱️ Click event (Vanilla JS): Selected ' + itemName);
+                    alert('Selected: ' + itemName + '\nPrice: ' + price);
+                    
+                    this.style.backgroundColor = '#c9a66b';
+                    this.style.color = 'white';
+                    
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                        this.style.color = '';
+                    }, 1000);
+                });
+            });
+
+            // EVENT 3: KEYPRESS - Search functionality
+            searchInput.addEventListener('keypress', function(e) {
+                console.log('⌨️ Keypress event (Vanilla JS): ' + e.key);
+                
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value.toLowerCase();
+                    console.log('🔍 Searching for: ' + searchTerm);
+                    
+                    menuRows.forEach(row => {
+                        const itemName = row.querySelector('.item-name').textContent.toLowerCase();
+                        const itemDesc = row.querySelector('.item-desc').textContent.toLowerCase();
+                        
+                        if (itemName.includes(searchTerm) || itemDesc.includes(searchTerm)) {
+                            row.style.display = '';
+                            row.style.backgroundColor = '#fff8e1';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+            });
+
+            // EVENT 4: FOCUS - Search input focus
+            searchInput.addEventListener('focus', function() {
+                console.log('🎯 Focus event (Vanilla JS): Search input focused');
+                this.style.border = '3px solid #c9a66b';
+                this.style.transform = 'scale(1.05)';
+            });
+
+            searchInput.addEventListener('blur', function() {
+                this.style.border = '2px solid #c9a66b';
+                this.style.transform = 'scale(1)';
+            });
+
+            // EVENT 5: CHANGE - Search input change
+            searchInput.addEventListener('change', function() {
+                console.log('🔄 Change event (Vanilla JS): Search value changed to: ' + this.value);
+            });
+        });
+
+        // ========================================
+        // JQUERY EVENTS
+        // ========================================
+        $(document).ready(function() {
+            console.log('✅ Menu Page - jQuery Loaded!');
+
+            // jQuery CLICK - Price highlighting
+            $('.price').on('click', function(e) {
+                e.stopPropagation();
+                console.log('🖱️ Click event (jQuery): Price clicked');
+                
+                $(this).css({
+                    'font-size': '1.4rem',
+                    'color': '#e74c3c'
+                });
+                
+                setTimeout(() => {
+                    $(this).css({
+                        'font-size': '1.1rem',
+                        'color': '#c9a66b'
+                    });
+                }, 500);
+            });
+
+            // jQuery MOUSEMOVE - Image rotation
+            $('.item-image').on('mousemove', function(e) {
+                const offset = $(this).offset();
+                const x = e.pageX - offset.left;
+                const y = e.pageY - offset.top;
+                
+                const centerX = $(this).width() / 2;
+                const centerY = $(this).height() / 2;
+                
+                const rotateX = (y - centerY) / 5;
+                const rotateY = (centerX - x) / 5;
+                
+                $(this).css('transform', `rotate(5deg) scale(1.1) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+            });
+
+            $('.item-image').on('mouseleave', function() {
+                $(this).css('transform', '');
+            });
+
+            // jQuery KEYPRESS - Quick filter
+            $('#menuSearch').on('keyup', function() {
+                const value = $(this).val().toLowerCase();
+                console.log('⌨️ Keypress event (jQuery): Filtering with: ' + value);
+                
+                if (value === '') {
+                    $('tbody tr').show().css('background-color', '');
+                } else {
+                    $('tbody tr').each(function() {
+                        const text = $(this).text().toLowerCase();
+                        if (text.includes(value)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                }
+            });
+
+            // jQuery FOCUS - Header animation
+            $('h2').hover(
+                function() {
+                    $(this).css({
+                        'transform': 'scale(1.1) rotate(2deg)',
+                        'color': '#c9a66b'
+                    });
+                },
+                function() {
+                    $(this).css({
+                        'transform': 'scale(1) rotate(0)',
+                        'color': '#5c3b2f'
+                    });
+                }
+            );
+
+            // jQuery CHANGE - Row selection tracking
+            let selectedItems = [];
+            $('tbody tr').on('dblclick', function() {
+                const itemName = $(this).find('.item-name').text();
+                console.log('🔄 Change event (jQuery): Double-clicked ' + itemName);
+                
+                if (!selectedItems.includes(itemName)) {
+                    selectedItems.push(itemName);
+                    $(this).css('border-left', '5px solid #c9a66b');
+                } else {
+                    selectedItems = selectedItems.filter(i => i !== itemName);
+                    $(this).css('border-left', 'none');
+                }
+                
+                console.log('Selected items:', selectedItems);
+            });
+        });
+    </script>
+</body>
+</html>

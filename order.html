@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f0e5;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">🍰</text></svg>'), auto;
+        }
+    
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            font-size: 2.5rem;
+            color: #5c3b2f;
+            animation: bounceIn 1s ease;
+            transition: all 0.3s ease;
+        }
+        
+        h2:hover {
+            transform: scale(1.05);
+            color: #c9a66b;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+     
+        h3 {
+            margin: 25px 0 20px;
+            padding-bottom: 8px;
+            color: #6d5643;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        h3::before { content: "✨ "; }
+        h3::after { content: " ✨"; }
+
+        .instructions {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            background: #fdf9f3;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px dashed #c9a66b;
+            box-shadow: 0 8px 25px rgba(92, 59, 47, 0.15);
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .instructions:hover {
+            box-shadow: 0 12px 35px rgba(92, 59, 47, 0.2);
+        }
+
+        .instructions::before {
+            content: "👨‍🍳";
+            position: absolute;
+            top: -25px;
+            left: 20px;
+            font-size: 2.5rem;
+        }
+
+        .instructions ol {
+            padding-left: 30px;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            color: #5c3b2f;
+            position: relative;
+            padding-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .instructions li:hover {
+            color: #c9a66b;
+            transform: translateX(5px);
+        }
+
+        .instructions li::before {
+            content: "🍪";
+            position: absolute;
+            left: -30px;
+        }
+
+        .form-container {
+            background: #fdf9f3;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(92, 59, 47, 0.15);
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px;
+            border: 3px solid #c9a66b;
+            position: relative;
+            animation: float 4s ease-in-out infinite 1s;
+            transition: all 0.3s ease;
+        }
+        
+        .form-container:hover {
+            box-shadow: 0 12px 35px rgba(92, 59, 47, 0.2);
+        }
+
+        .form-container::before {
+            content: "🎂";
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            font-size: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #5c3b2f;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+        }
+        
+        label:hover {
+            color: #c9a66b;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #d8c9b3;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #c9a66b;
+            box-shadow: 0 0 15px rgba(201, 166, 107, 0.4);
+            background: #fffef7;
+            transform: scale(1.01);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .toppings-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+            padding: 15px;
+            background: #fff8f0;
+            border-radius: 15px;
+            border: 2px dotted #c9a66b;
+        }
+
+        .topping-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+            border: 1px solid #e8dcc8;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .topping-option:hover {
+            background: #fdf9f3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 166, 107, 0.2);
+            border-color: #c9a66b;
+        }
+
+        .topping-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #c9a66b;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 20px;
+            background: white;
+            border: 2px solid #d8c9b3;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .radio-option:hover {
+            background: #fdf9f3;
+            border-color: #c9a66b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 166, 107, 0.3);
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #c9a66b;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 16px 30px;
+            width: 100%;
+            background: linear-gradient(135deg, #c9a66b, #d4b884);
+            color: #fdf9f3;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(201, 166, 107, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #d4b884, #e0c89a);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(201, 166, 107, 0.5);
+        }
+
+        .btn::before { content: "🎉 "; }
+        .btn::after { content: " 🎉"; }
+
+        .contact-info {
+            max-width: 700px;
+            margin: 40px auto 0;
+            text-align: center;
+            padding: 30px;
+            background: #fdf9f3;
+            border-radius: 20px;
+            border: 3px solid #c9a66b;
+            box-shadow: 0 8px 25px rgba(92, 59, 47, 0.15);
+            animation: float 4s ease-in-out infinite 2s;
+        }
+
+        .contact-info p {
+            margin: 12px 0;
+            font-size: 1.1rem;
+            color: #5c3b2f;
+            font-weight: 600;
+        }
+
+        #topping-summary {
+            margin-top: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff8e1, #fffbea);
+            border-radius: 12px;
+            border: 2px solid #c9a66b;
+            animation: slideIn 0.5s ease;
+            box-shadow: 0 4px 12px rgba(201, 166, 107, 0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .validation-hint {
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+            font-weight: 600;
+        }
+        
+        .validation-hint.error {
+            color: #e74c3c;
+        }
+        
+        .validation-hint.success {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <h2>
+        <span class="left-toast">🍞</span> Place Your Order <span class="right-toast">🍞</span> 
+    </h2>
+    
+    <div class="instructions">
+        <h3>How to Order</h3>
+        <ol>
+            <li>Fill out the form below</li>
+            <li>Include any additional notes (e.g., allergy notes, custom message)</li>
+            <li>Submit your order, we'll confirm via email within 2 hours</li>
+            <li>Pick up in store or select delivery (available within 5 km)</li>
+        </ol>
+    </div>
+
+    <div class="form-container">
+        <form id="order-form" action="#" method="POST">
+            <div class="form-group">
+                <label for="name">👤 Full Name *</label>
+                <input type="text" id="name" name="name" required placeholder="Type your full name...">
+                <span id="name-hint" class="validation-hint"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">💌 Email *</label>
+                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                <span id="email-hint" class="validation-hint"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="item">🍰 Item to Order *</label>
+                <select id="item" name="item" required>
+                    <option value="">-- Select --</option>
+                    <option value="cheesecake">Cheesecake</option>
+                    <option value="croissant">Croissant</option>
+                    <option value="cromboloni">Cromboloni</option>
+                    <option value="cookie-bomb">Cookie Bomb</option>
+                    <option value="beef-roll">Shredded Beef Roll Cake</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>🍓 Toppings (Optional)</label>
+                <div class="toppings-group">
+                    <div class="topping-option">
+                        <input type="checkbox" id="topping1" name="toppings" value="Strawberry-Sauce">
+                        <label for="topping1">Strawberry Sauce</label>
+                    </div>
+                    <div class="topping-option">
+                        <input type="checkbox" id="topping2" name="toppings" value="Pistacio-Crumble">
+                        <label for="topping2">Pistacio Crumble</label>
+                    </div>
+                    <div class="topping-option">
+                        <input type="checkbox" id="topping3" name="toppings" value="Matcha-Glaze">
+                        <label for="topping3">Matcha Glaze</label>
+                    </div>
+                    <div class="topping-option">
+                        <input type="checkbox" id="topping4" name="toppings" value="Mango-Puree">
+                        <label for="topping4">Mango Puree</label>
+                    </div>
+                    <div class="topping-option">
+                        <input type="checkbox" id="topping5" name="toppings" value="Caramel-Glaze">
+                        <label for="topping5">Caramel Glaze</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🚚 Order Type *</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="delivery" name="orderType" value="delivery" required>
+                        <label for="delivery">Delivery</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="pickup" name="orderType" value="pickup">
+                        <label for="pickup">Pick Up</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">📍 Address/Pick Up Time *</label>
+                <textarea id="address" name="address" placeholder="For delivery, input full address. For pickup, input the time and date." required></textarea>
+                <span id="address-counter" class="validation-hint"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">📝 Additional Notes</label>
+                <textarea id="message" name="message" placeholder="Allergy notes, custom message, etc." rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="btn">Submit Order</button>
+        </form>
+    </div>
+
+    <div class="contact-info">
+        <p>💕 Or contact us directly 💕</p>
+        <p>📞 0888 9999 8888</p>
+        <p>✉️ dearbakery@gmail.com</p>
+        <p>📍 Cengkareng, West Java</p>
+    </div>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('order-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const itemSelect = document.getElementById('item');
+            const addressInput = document.getElementById('address');
+            const formContainer = document.querySelector('.form-container');
+
+            // EVENT 1: MOUSEMOVE - Form parallax
+            document.addEventListener('mousemove', function(e) {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+                
+                formContainer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                console.log('🖱️ Mousemove (Vanilla JS): Form parallax effect');
+            });
+
+            // EVENT 2: CLICK - Topping selection
+            document.querySelectorAll('input[type="checkbox"][name="toppings"]').forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    console.log('🖱️ Click event (Vanilla JS): Topping ' + this.value);
+                    
+                    const selectedToppings = [];
+                    document.querySelectorAll('input[type="checkbox"][name="toppings"]:checked').forEach(cb => {
+                        selectedToppings.push(cb.value.replace('-', ' '));
+                    });
+                    
+                    if (selectedToppings.length > 0) {
+                        if (!document.getElementById('topping-summary')) {
+                            const summary = document.createElement('div');
+                            summary.id = 'topping-summary';
+                            document.querySelector('.toppings-group').after(summary);
+                        }
+                        document.getElementById('topping-summary').innerHTML = 
+                            '<strong>🎀 Selected Toppings:</strong> ' + selectedToppings.join(', ');
+                    } else {
+                        const summary = document.getElementById('topping-summary');
+                        if (summary) summary.remove();
+                    }
+                });
+            });
+
+            // EVENT 3: KEYPRESS - Name field feedback
+            nameInput.addEventListener('keypress', function(e) {
+                console.log('⌨️ Keypress event (Vanilla JS): ' + e.key + ' in name field');
+                
+                const currentValue = this.value + e.key;
+                const hintElement = document.getElementById('name-hint');
+                
+                if (currentValue.length === 1) {
+                    hintElement.textContent = '🌸 Great! Keep typing your full name...';
+                    hintElement.className = 'validation-hint';
+                } else if (currentValue.length >= 3) {
+                    hintElement.textContent = '✔ Looking good!';
+                    hintElement.className = 'validation-hint success';
+                }
+            });
+
+            // EVENT 4: FOCUS - Input highlighting
+            const inputs = [nameInput, emailInput, itemSelect, addressInput];
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    console.log('🎯 Focus event (Vanilla JS): ' + this.id + ' focused');
+                    
+                    this.style.borderColor = '#c9a66b';
+                    this.style.boxShadow = '0 0 15px rgba(201, 166, 107, 0.4)';
+                    this.style.background = '#fffef7';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.style.borderColor = '#d8c9b3';
+                    this.style.boxShadow = 'none';
+                    this.style.background = 'white';
+                });
+            });
+
+            // EVENT 5: CHANGE - Email validation
+            emailInput.addEventListener('change', function() {
+                const email = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const hintElement = document.getElementById('email-hint');
+                
+                console.log('🔄 Change event (Vanilla JS): Email = ' + email);
+                
+                if (email === '') {
+                    hintElement.textContent = '';
+                } else if (!emailRegex.test(email)) {
+                    hintElement.textContent = '✘ Invalid email format';
+                    hintElement.className = 'validation-hint error';
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    hintElement.textContent = '✔ Valid email';
+                    hintElement.className = 'validation-hint success';
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+
+            // Order type change
+            document.querySelectorAll('input[name="orderType"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('🔄 Change event (Vanilla JS): Order type = ' + this.value);
+                    
+                    if (this.value === 'delivery') {
+                        addressInput.placeholder = '🚚 Enter your full delivery address (Street, City, Postal Code)';
+                        addressInput.style.background = '#fff8f0';
+                    } else {
+                        addressInput.placeholder = '⏰ Enter preferred pickup date and time (e.g., Dec 10, 2025 at 2:00 PM)';
+                        addressInput.style.background = '#f0fff4';
+                    }
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const item = itemSelect.value;
+                const orderType = document.querySelector('input[name="orderType"]:checked')?.value;
+                const address = addressInput.value.trim();
+                
+                console.log('🖱️ Click event (Vanilla JS): Form submitted');
+                
+                if (!name || name.length < 3) {
+                    alert('👤 Please enter a valid name (min 3 characters)');
+                    nameInput.focus();
+                    return;
+                }
+                
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alert('💌 Please enter a valid email address');
+                    emailInput.focus();
+                    return;
+                }
+                
+                if (!item) {
+                    alert('🍰 Please select an item to order');
+                    itemSelect.focus();
+                    return;
+                }
+                
+                if (!orderType) {
+                    alert('🚚 Please select delivery or pickup');
+                    return;
+                }
+                
+                if (!address || address.length < 10) {
+                    alert('📍 Please provide a complete address or pickup time');
+                    addressInput.focus();
+                    return;
+                }
+                
+                alert('✨🎉 Order submitted successfully! 🎉✨\n\nThank you, ' + name + '!\nWe will confirm your order via email within 2 hours. 💕');
+                
+                this.reset();
+                const summary = document.getElementById('topping-summary');
+                if (summary) summary.remove();
+                document.querySelectorAll('.validation-hint').forEach(hint => hint.textContent = '');
+            });
+        });
+
+        // ========================================
+        // JQUERY EVENTS
+        // ========================================
+        $(document).ready(function() {
+            console.log('✅ Order Page - jQuery Loaded!');
+            
+            // jQuery MOUSEMOVE - Address character counter
+            $('#address').on('mousemove', function(e) {
+                const length = $(this).val().length;
+                const maxLength = 200;
+                const remaining = maxLength - length;
+                const counterElement = $('#address-counter');
+                
+                if (length > 0) {
+                    console.log('🖱️ Mousemove event (jQuery): Address length = ' + length);
+                    
+                    if (remaining < 0) {
+                        counterElement.text('⚠️ Too long! Please keep it under 200 characters.');
+                        counterElement.removeClass('success').addClass('error');
+                    } else if (remaining < 50) {
+                        counterElement.text('⚡ ' + remaining + ' characters remaining');
+                        counterElement.removeClass('success error');
+                    } else {
+                        counterElement.text('✨ ' + length + ' / 200 characters');
+                        counterElement.removeClass('error').addClass('success');
+                    }
+                } else {
+                    counterElement.text('');
+                }
+            });
+
+            // jQuery CLICK - Topping hover effect
+            $('.topping-option').on('click', function() {
+                const topping = $(this).find('label').text();
+                console.log('🖱️ Click event (jQuery): Topping option clicked - ' + topping);
+                
+                $(this).css('transform', 'scale(0.95)');
+                setTimeout(() => {
+                    $(this).css('transform', '');
+                }, 200);
+            });
+
+            // jQuery KEYPRESS - Real-time validation
+            $('#name').on('keyup', function() {
+                const length = $(this).val().length;
+                console.log('⌨️ Keypress event (jQuery): Name length = ' + length);
+                
+                if (length >= 3) {
+                    $('#name-hint').text('✔ Name looks good!').removeClass('error').addClass('success');
+                }
+            });
+
+            // jQuery FOCUS - Label animation
+            $('input, textarea, select').on('focus', function() {
+                console.log('🎯 Focus event (jQuery): ' + $(this).attr('id') + ' focused');
+                
+                $(this).parent().find('label').css({
+                    'color': '#c9a66b',
+                    'transform': 'scale(1.05)'
+                });
+            }).on('blur', function() {
+                $(this).parent().find('label').css({
+                    'color': '#5c3b2f',
+                    'transform': 'scale(1)'
+                });
+            });
+
+            // jQuery CHANGE - Item selection
+            $('#item').on('change', function() {
+                const selectedItem = $(this).val();
+                console.log('🔄 Change event (jQuery): Item selected = ' + selectedItem);
+                
+                if (selectedItem) {
+                    $(this).css({
+                        'background-color': '#fff8e1',
+                        'font-weight': 'bold'
+                    });
+                } else {
+                    $(this).css({
+                        'background-color': 'white',
+                        'font-weight': 'normal'
+                    });
+                }
+            });
+
+            // Button hover animation
+            $('.btn').on('mouseenter', function() {
+                $(this).css('transform', 'translateY(-3px) scale(1.02)');
+            }).on('mouseleave', function() {
+                $(this).css('transform', 'translateY(0) scale(1)');
+            });
+
+            // Heading click animation
+            $('h2').on('click', function() {
+                $(this).css({
+                    'transform': 'scale(1.15) rotate(3deg)',
+                    'text-shadow': '0 0 20px rgba(201, 166, 107, 0.6)'
+                });
+                setTimeout(() => {
+                    $(this).css({
+                        'transform': 'scale(1) rotate(0)',
+                        'text-shadow': 'none'
+                    });
+                }, 300);
+            });
+
+            // Instructions list item click
+            $('.instructions li').on('click', function() {
+                $(this).css('background-color', '#fff8e1');
+                setTimeout(() => {
+                    $(this).css('background-color', '');
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

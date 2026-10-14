@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ecddc5 0%, #f8f0e5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: auto;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'><text y='90' font-size='90'>🧁</text></svg>") 15 15, auto;
+            perspective: 1000px;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Bakery Emoji Rain Background */
+        #bakery-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .bakery-emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0;
+            pointer-events: none;
+            user-select: none;
+            will-change: transform, opacity;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: rain-fall-smooth linear infinite;
+        }
+
+        @keyframes rain-fall-smooth {
+            0% {
+                top: -10%;
+                opacity: 0;
+                transform: translateX(0) rotate(0deg) scale(0.5);
+            }
+            5% {
+                opacity: 0.7;
+                transform: translateX(calc(var(--drift) * 0.05)) rotate(18deg) scale(1);
+            }
+            95% {
+                opacity: 0.7;
+                transform: translateX(calc(var(--drift) * 0.95)) rotate(342deg) scale(1);
+            }
+            100% {
+                top: 110%;
+                opacity: 0;
+                transform: translateX(var(--drift)) rotate(360deg) scale(0.5);
+            }
+        }
+
+        .register-container {
+            background: linear-gradient(145deg, #f8f0e5, #ffffff);
+            padding: 40px 35px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(92, 59, 47, 0.3);
+            width: 100%;
+            max-width: 550px;
+            text-align: left;
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            z-index: 10;
+            border: 3px solid #c9a66b;
+        }
+
+        .register-container::before {
+            content: '🧁';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #6d5643;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2:hover {
+            transform: scale(1.05);
+            color: #c9a66b;
+            text-shadow: 0 0 15px rgba(201, 166, 107, 0.5);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6d5643;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #6d5643;
+            font-size: 0.98rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #d4c5b0;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            font-family: 'Georgia', serif;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #c49b66;
+            background-color: #fff7ec;
+            box-shadow: 0 0 0 4px rgba(196, 155, 102, 0.2);
+            transform: scale(1.01);
+        }
+
+        .highlight {
+            border: 3px solid #c49b66 !important;
+            background-color: #fff7ec !important;
+            box-shadow: 0 0 20px rgba(201, 166, 107, 0.4) !important;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 2px solid #d4c5b0;
+            background-color: #fff;
+        }
+
+        .radio-group label,
+        .checkbox-group label {
+            display: inline-block;
+            margin-left: 4px;
+            margin-right: 15px;
+            font-weight: 500;
+        }
+
+        .validation-msg {
+            font-size: 0.8rem;
+            margin-top: 4px;
+            min-height: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .validation-msg.error {
+            color: #ff0000;
+        }
+
+        .validation-msg.success {
+            color: #11aa00;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #c49b66, #d4b884);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(196, 155, 102, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #b38850, #c9a66b);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(196, 155, 102, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: #6d5643;
+            text-decoration: underline;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #c49b66;
+            text-decoration: none;
+        }
+
+        .typing-indicator {
+            position: absolute;
+            top: -22px;
+            right: 10px;
+            font-size: 1.2rem;
+            animation: typing-bounce 0.5s ease;
+            pointer-events: none;
+        }
+
+        @keyframes typing-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.2); }
+        }
+
+        .emoji-particle {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: particle-rise 2s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes particle-rise {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .shake {
+            animation: shake-animation 0.5s;
+        }
+
+        @keyframes shake-animation {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Bakery Emoji Rain Field -->
+    <div id="bakery-field"></div>
+
+    <!-- Register Container -->
+    <div class="register-container">
+        <h2>Create Your Account</h2>
+        <p class="subtitle">Join Dear Bakery and enjoy sweet moments!</p>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="fullname">👤 Full Name *</label>
+                <input type="text" id="fullname" name="fullname" required placeholder="Enter your full name">
+                <div class="validation-msg" id="fullnameMsg"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">📧 Email *</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <div class="validation-msg" id="emailMsg"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">🔒 Password *</label>
+                <input type="password" id="password" name="password" minlength="6" required placeholder="Create a password">
+                <div class="validation-msg" id="passwordMsg"></div>
+            </div>
+
+            <div class="form-group">
+                <label>⚧ Gender *</label>
+                <div class="radio-group" id="genderGroup">
+                    <input type="radio" id="male" name="gender" value="male" required>
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+                </div>
+                <div class="validation-msg" id="genderMsg"></div>
+            </div>
+
+            <div class="form-group">
+                <label>🍰 Favorite Categories (Optional)</label>
+                <div class="checkbox-group" id="categoryGroup">
+                    <input type="checkbox" id="cakes" value="Cakes">
+                    <label for="cakes">Cakes</label><br>
+                    <input type="checkbox" id="pastries" value="Pastries">
+                    <label for="pastries">Pastries</label><br>
+                    <input type="checkbox" id="bread" value="Bread">
+                    <label for="bread">Bread</label>
+                </div>
+                <div class="validation-msg" id="categoryMsg"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">📦 Delivery Address *</label>
+                <textarea id="address" name="address" required placeholder="Enter your full delivery address"></textarea>
+                <div class="validation-msg" id="addressMsg"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="province">🏙 Province *</label>
+                <select id="province" name="province" required>
+                    <option value="">-- Select your province --</option>
+                    <option value="Aceh">Aceh</option>
+                    <option value="Banten">Banten</option>
+                    <option value="Bali">Bali</option>
+                    <option value="DKI Jakarta">DKI Jakarta</option>
+                    <option value="Jawa Barat">Jawa Barat</option>
+                    <option value="Jawa Tengah">Jawa Tengah</option>
+                    <option value="Kepulauan Bangka Belitung">Kep. Bangka Belitung</option>
+                    <option value="Kepulauan Riau">Kep. Riau</option>
+                    <option value="Lampung">Lampung</option>
+                    <option value="Maluku">Maluku</option>
+                    <option value="Nusa Tenggara Barat">Nusa Tenggara Barat</option>
+                    <option value="Nusa Tenggara Timur">Nusa Tenggara Timur</option>
+                    <option value="Papua">Papua</option>
+                    <option value="Sulawesi Selatan">Sulawesi Selatan</option>
+                    <option value="Sulawesi Utara">Sulawesi Utara</option>
+                    <option value="Sumatera Barat">Sumatera Barat</option>
+                    <option value="DI Yogyakarta">DI Yogyakarta</option>
+                </select>
+                <div class="validation-msg" id="provinceMsg"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">🎉 Create Account 🎉</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account?
+            <a href="login.html">Log In</a>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS (REGISTER)
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const bakeryField = document.getElementById('bakery-field');
+            const registerContainer = document.querySelector('.register-container');
+            const registerForm = document.getElementById('registerForm');
+
+            const fullnameInput = document.getElementById('fullname');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const addressInput = document.getElementById('address');
+            const provinceSelect = document.getElementById('province');
+            const genderRadios = document.querySelectorAll('input[name="gender"]');
+
+            const bakeryEmojis = ['🍪', '🍩', '🍰', '🥐', '🍞', '🥖', '🧁', '🥯', '🥨', '🍮'];
+
+            // Create continuously raining bakery emojis with smooth appearance
+            function createRainingEmoji() {
+                const emoji = document.createElement('div');
+                emoji.className = 'bakery-emoji';
+                emoji.textContent = bakeryEmojis[Math.floor(Math.random() * bakeryEmojis.length)];
+
+                // Random horizontal position
+                emoji.style.left = Math.random() * 100 + '%';
+                
+                // Random drift amount for horizontal movement
+                const drift = (Math.random() - 0.5) * 100 + 'px';
+                emoji.style.setProperty('--drift', drift);
+                
+                // Random animation duration (speed) - slower for smoother effect
+                const duration = Math.random() * 4 + 6; // 6-10 seconds (slower)
+                emoji.style.animationDuration = duration + 's';
+                
+                // No delay - smooth continuous flow
+                emoji.style.animationDelay = '0s';
+                
+                // Random size
+                emoji.style.fontSize = (Math.random() * 1.5 + 2) + 'rem';
+
+                bakeryField.appendChild(emoji);
+
+                // Remove emoji after animation completes
+                setTimeout(() => {
+                    emoji.remove();
+                }, duration * 1000);
+            }
+
+            // Create initial batch with staggered timing for smooth start
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createRainingEmoji(), i * 200);
+            }
+
+            // Continuously create new falling emojis - more frequent for seamless flow
+            setInterval(() => {
+                createRainingEmoji();
+            }, 600);
+
+            // EVENT 1: MOUSEMOVE - very subtle parallax effect
+            let currentX = 0;
+            let currentY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            document.addEventListener('mousemove', (event) => {
+                targetX = (event.clientX - window.innerWidth / 2) * 0.003;
+                targetY = (event.clientY - window.innerHeight / 2) * 0.003;
+            });
+
+            // Smooth animation loop using requestAnimationFrame
+            function smoothParallax() {
+                currentX += (targetX - currentX) * 0.1; // Smooth interpolation
+                currentY += (targetY - currentY) * 0.1;
+                
+                registerContainer.style.transform =
+                    `translate(${currentX}px, ${currentY}px) rotateY(${currentX * 0.05}deg) rotateX(${-currentY * 0.05}deg)`;
+                
+                requestAnimationFrame(smoothParallax);
+            }
+            smoothParallax();
+
+            // EVENT 2: CLICK (SUBMIT) - validation + particle effect
+            registerForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const fullname = fullnameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const address = addressInput.value.trim();
+                const province = provinceSelect.value;
+                const gender = Array.from(genderRadios).find(r => r.checked)?.value || '';
+
+                let valid = true;
+
+                if (!fullname) {
+                    document.getElementById('fullnameMsg').textContent = '❌ Full name is required';
+                    document.getElementById('fullnameMsg').className = 'validation-msg error';
+                    valid = false;
+                }
+                if (!email) {
+                    document.getElementById('emailMsg').textContent = '❌ Email is required';
+                    document.getElementById('emailMsg').className = 'validation-msg error';
+                    valid = false;
+                }
+                if (!password || password.length < 6) {
+                    document.getElementById('passwordMsg').textContent = '⚠️ Password min 6 characters';
+                    document.getElementById('passwordMsg').className = 'validation-msg error';
+                    valid = false;
+                }
+                if (!gender) {
+                    document.getElementById('genderMsg').textContent = '❌ Please select your gender';
+                    document.getElementById('genderMsg').className = 'validation-msg error';
+                    valid = false;
+                }
+                if (!address) {
+                    document.getElementById('addressMsg').textContent = '❌ Delivery address is required';
+                    document.getElementById('addressMsg').className = 'validation-msg error';
+                    valid = false;
+                }
+                if (!province) {
+                    document.getElementById('provinceMsg').textContent = '❌ Please select a province';
+                    document.getElementById('provinceMsg').className = 'validation-msg error';
+                    valid = false;
+                }
+
+                if (!valid) {
+                    registerContainer.classList.add('shake');
+                    setTimeout(() => registerContainer.classList.remove('shake'), 500);
+                    alert('❌ Please complete all required fields correctly!');
+                    return;
+                }
+
+                // Success particle effect
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'emoji-particle';
+                        particle.textContent = bakeryEmojis[Math.floor(Math.random() * bakeryEmojis.length)];
+                        particle.style.left = (registerContainer.offsetLeft + registerContainer.offsetWidth / 2) + 'px';
+                        particle.style.top = (registerContainer.offsetTop + registerContainer.offsetHeight / 2) + 'px';
+                        document.body.appendChild(particle);
+
+                        setTimeout(() => particle.remove(), 2000);
+                    }, i * 100);
+                }
+
+                setTimeout(() => {
+                    alert('✅ Account created successfully!\nWelcome to Dear Bakery, ' + fullname + '! 🎉🧁');
+                    this.reset();
+                    document.querySelectorAll('.validation-msg').forEach(m => m.textContent = '');
+                }, 1000);
+            });
+
+            // EVENT 3: KEYPRESS - show typing indicator on text fields
+            [fullnameInput, emailInput, passwordInput, addressInput].forEach(input => {
+                input.addEventListener('keypress', function () {
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.typing-indicator').forEach(ind => ind.remove());
+
+                    const indicator = document.createElement('span');
+                    indicator.className = 'typing-indicator';
+                    indicator.textContent = '⌨️';
+                    parent.appendChild(indicator);
+
+                    setTimeout(() => indicator.remove(), 500);
+                });
+            });
+
+            // Password visibility toggle via global keypress (R/r)
+            let keyPressCount = 0;
+            document.addEventListener('keypress', function (e) {
+                keyPressCount++;
+                console.log('KEYPRESS: ' + e.key + ' total=' + keyPressCount);
+
+                if (e.key === 'r' || e.key === 'R') {
+                    if (document.activeElement !== passwordInput) {
+                        const currentType = passwordInput.type;
+                        passwordInput.type = currentType === 'password' ? 'text' : 'password';
+
+                        const msg = document.getElementById('passwordMsg');
+                        msg.textContent = currentType === 'password'
+                            ? '👁️ Password visible'
+                            : '🔒 Password hidden';
+                        msg.className = 'validation-msg';
+
+                        setTimeout(() => {
+                            if (currentType !== 'password') {
+                                passwordInput.type = 'password';
+                                msg.textContent = '';
+                            }
+                        }, 2000);
+                    }
+                }
+            });
+
+            // EVENT 4: FOCUS / BLUR - highlight fields
+            function focusHandler(input, msgId, message) {
+                input.addEventListener('focus', function () {
+                    this.classList.add('highlight');
+                    const label = this.parentElement.querySelector('label');
+                    if (label) {
+                        label.style.color = '#c9a66b';
+                        label.style.transform = 'scale(1.05)';
+                    }
+                    if (msgId && message) {
+                        const msg = document.getElementById(msgId);
+                        msg.textContent = message;
+                        msg.className = 'validation-msg';
+                    }
+                });
+
+                input.addEventListener('blur', function () {
+                    this.classList.remove('highlight');
+                    const label = this.parentElement.querySelector('label');
+                    if (label) {
+                        label.style.color = '#6d5643';
+                        label.style.transform = 'scale(1)';
+                    }
+                });
+            }
+
+            focusHandler(fullnameInput, 'fullnameMsg', '✏️ Enter your full name');
+            focusHandler(emailInput, 'emailMsg', '📧 Use a valid email');
+            focusHandler(passwordInput, 'passwordMsg', '🔒 Minimum 6 characters');
+            focusHandler(addressInput, 'addressMsg', '🏠 Complete delivery details');
+            focusHandler(provinceSelect, 'provinceMsg', '📍 Choose your province');
+
+            // EVENT 5: CHANGE - basic validation per field
+            fullnameInput.addEventListener('change', function () {
+                const v = this.value.trim();
+                const msg = document.getElementById('fullnameMsg');
+                if (v.length === 0) {
+                    msg.textContent = '❌ Full name is required';
+                    msg.className = 'validation-msg error';
+                } else if (v.length < 3) {
+                    msg.textContent = '⚠️ Name is too short';
+                    msg.className = 'validation-msg error';
+                } else {
+                    msg.textContent = '✅ Looks good!';
+                    msg.className = 'validation-msg success';
+                }
+            });
+
+            emailInput.addEventListener('change', function () {
+                const v = this.value.trim();
+                const msg = document.getElementById('emailMsg');
+                if (v.length === 0) {
+                    msg.textContent = '❌ Email is required';
+                    msg.className = 'validation-msg error';
+                } else if (!v.includes('@') || !v.includes('.')) {
+                    msg.textContent = '⚠️ Email format seems invalid';
+                    msg.className = 'validation-msg error';
+                } else {
+                    msg.textContent = '✅ Email looks valid!';
+                    msg.className = 'validation-msg success';
+                }
+            });
+
+            passwordInput.addEventListener('change', function () {
+                const v = this.value;
+                const msg = document.getElementById('passwordMsg');
+                if (v.length === 0) {
+                    msg.textContent = '❌ Password is required';
+                    msg.className = 'validation-msg error';
+                } else if (v.length < 6) {
+                    msg.textContent = '⚠️ Too short (min 6 characters)';
+                    msg.className = 'validation-msg error';
+                } else if (v.length < 8) {
+                    msg.textContent = '✔️ Password strength: Medium';
+                    msg.className = 'validation-msg';
+                } else {
+                    msg.textContent = '✅ Password strength: Strong!';
+                    msg.className = 'validation-msg success';
+                }
+            });
+
+            provinceSelect.addEventListener('change', function () {
+                const v = this.value;
+                const msg = document.getElementById('provinceMsg');
+                if (!v) {
+                    msg.textContent = '❌ Province is required';
+                    msg.className = 'validation-msg error';
+                } else {
+                    msg.textContent = '✅ Province selected: ' + v;
+                    msg.className = 'validation-msg success';
+                }
+            });
+
+            genderRadios.forEach(r => {
+                r.addEventListener('change', function () {
+                    const msg = document.getElementById('genderMsg');
+                    msg.textContent = '✅ Gender selected: ' + this.value;
+                    msg.className = 'validation-msg success';
+                });
+            });
+        });
+
+        // ========================================
+        // JQUERY EVENTS (REGISTER)
+        // ========================================
+        $(document).ready(function () {
+            console.log('✅ Register Page - jQuery Loaded!');
+
+            // jQuery MOUSEMOVE-like effect on labels (hover)
+            $('.form-group label').on('mouseenter', function () {
+                $(this).css({
+                    'color': '#c9a66b',
+                    'letter-spacing': '1px',
+                    'text-shadow': '0 2px 5px rgba(201, 166, 107, 0.3)'
+                });
+            }).on('mouseleave', function () {
+                if (!$(this).siblings('input, textarea, select').is(':focus')) {
+                    $(this).css({
+                        'color': '#6d5643',
+                        'letter-spacing': '0px',
+                        'text-shadow': 'none'
+                    });
+                }
+            });
+
+            // jQuery CLICK - heading & login link
+            $('h2').on('click', function () {
+                $(this).css({
+                    'transform': 'scale(1.15) rotate(3deg)',
+                    'color': '#c9a66b'
+                });
+                setTimeout(() => {
+                    $(this).css({
+                        'transform': 'scale(1) rotate(0deg)',
+                        'color': '#6d5643'
+                    });
+                }, 300);
+            });
+
+            $('.login-link a').on('click', function () {
+                $(this).css('transform', 'scale(0.95)');
+                setTimeout(() => {
+                    $(this).css('transform', 'scale(1)');
+                }, 120);
+            });
+
+            // jQuery KEYPRESS - total keys in text inputs
+            let totalKeysPressed = 0;
+            $('#fullname, #email, #password, #address').on('keypress', function (e) {
+                totalKeysPressed++;
+                console.log('jQuery KEYPRESS: key=' + e.key + ' total=' + totalKeysPressed + ' field=' + $(this).attr('id'));
+            });
+
+            // jQuery FOCUS / BLUR - group background highlight
+            $('input, textarea, select').on('focus', function () {
+                $(this).parent().css({
+                    'background-color': 'rgba(255, 248, 236, 0.3)',
+                    'border-radius': '10px',
+                    'padding': '5px'
+                });
+            }).on('blur', function () {
+                $(this).parent().css({
+                    'background-color': 'transparent',
+                    'padding': '0'
+                });
+            });
+
+            // jQuery CHANGE - live logs for province and categories
+            $('#province').on('change', function () {
+                const val = $(this).val();
+                if (val) {
+                    console.log('jQuery CHANGE: province selected = ' + val);
+                }
+            });
+
+            $('#categoryGroup input[type="checkbox"]').on('change', function () {
+                const selected = [];
+                $('#categoryGroup input[type="checkbox"]:checked').each(function () {
+                    selected.push($(this).val());
+                });
+                $('#categoryMsg').text(
+                    selected.length > 0
+                        ? '💖 Favorite categories: ' + selected.join(', ')
+                        : ''
+                );
+            });
+
+            // Button hover enhancement
+            $('.submit-btn').hover(
+                function () {
+                    $(this).css({
+                        'box-shadow': '0 12px 40px rgba(196, 155, 102, 0.6)',
+                        'letter-spacing': '2px'
+                    });
+                },
+                function () {
+                    $(this).css({
+                        'box-shadow': '0 6px 20px rgba(196, 155, 102, 0.4)',
+                        'letter-spacing': '1px'
+                    });
+                }
+            );
+
+            // Container entrance animation
+            $('.register-container').css('opacity', '0').css('transform', 'scale(0.8)');
+            setTimeout(() => {
+                $('.register-container').animate({ opacity: 1 }, 500);
+                $('.register-container').css('transform', 'scale(1)');
+            }, 100);
+        });
+    </script>
+</body>
+</html>

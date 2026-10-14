@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Dear Bakery</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            padding: 0;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">🍪</text></svg>'), auto;
+        }
+        
+        .top-section {
+            height: 500px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: beige;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            position: relative;
+            transition: transform 0.1s ease;
+        }
+        
+        .top-section h1 {
+            border: 3px solid beige;
+            padding: 20px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .top-section h1:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(245, 245, 220, 0.5);
+        }
+        
+        .top-section p {
+            font-size: 1.25rem;
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-around;
+            gap: 40px;
+        }
+        
+        .about-section, .specials-section {
+            background-color: #fdf9f3;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+            transition: all 0.3s ease;
+        }
+        
+        .about-section:hover, .specials-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        
+        .about-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .about-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #c9a66b;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .about-section img:hover {
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .about-section h2, .specials-section h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        .special-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .special-item:hover {
+            background-color: #fff8f0;
+            padding-left: 10px;
+            border-radius: 5px;
+        }
+        
+        .special-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .special-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .special-item:hover img {
+            transform: scale(1.15);
+        }
+
+        .item-details h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #6d5643;
+        }
+        
+        .item-details p {
+            margin: 5px 0 0;
+            font-size: 0.9em;
+        }
+
+        .buttons-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .bottom-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .bottom-section h2 {
+            width: 100%;
+            margin: 0;
+        }
+        
+        .review-card {
+            background-color: #fdf9f3;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 30%;
+            min-width: 260px;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .review-card img {
+            display: block;
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .review-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .review-card h4 {
+            margin: 8px 0;
+            color: #6d5643;
+        }
+        
+        .review-card p {
+            margin: 6px 0;
+            font-size: 0.95rem;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        
+        .review-container {
+            padding: 10px 12px;
+        }
+        
+        .stars {
+            color: #c9a66b;
+        }
+        
+        footer {
+            margin-top: 50px;
+        }
+        
+        /* Keypress indicator */
+        .keypress-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(92, 59, 47, 0.9);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .keypress-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="keypress-indicator" id="keypressIndicator"></div>
+    
+    <div class="top-section">
+        <h1>WELCOME TO DEAR BAKERY</h1>
+        <p>Baking Modern Classic.</p>
+    </div>
+
+    <div class="content-wrapper">
+        <section class="about-section">
+            <img src="images/interior.jpg" alt="About Us Bakery Interior" id="aboutImage">
+            <div>
+                <h2>About Us</h2>
+                <p>Founded in 2025, Dear Bakery began as a small home kitchen with a dream to bring joy through baked goods.</p>
+                <p style="margin-bottom: 0; font-weight: bold;">Why Customers Love Us</p>
+                <ul style="max-width: 700px; margin: 0 auto; padding-left: 20px; line-height: 1.6;">
+                    <li>Freshly baked daily – never frozen or pre-made</li>
+                    <li>Free cake slice with membership</li>
+                    <li>Eco-friendly packaging made from recycled materials</li>
+                </ul>
+                <div class="buttons-container">
+                    <a href="about.html" target="contentFrame" class="btn">More</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="specials-section">
+            <h2>Daily Specials</h2>
+            <div class="special-item" data-item="croissant">
+                <img src="images/croissant.jpg" alt="Croissant">
+                <div class="item-details">
+                    <h3>Croissant</h3>
+                    <p style="font-weight: bold;">Rp 25.000</p>
+                </div>
+            </div>
+            <div class="special-item" data-item="cheesecake">
+                <img src="images/cheesecake.jpg" alt="cheesecake">
+                <div class="item-details">
+                    <h3>Cheesecake</h3>
+                    <p style="font-weight: bold;">Rp 20.000</p>
+                </div>
+            </div>
+            <div class="buttons-container">
+                <a href="menu.html" target="contentFrame" class="btn">View Our Menu</a>
+                <a href="order.html" target="contentFrame" class="btn">Order Now</a>
+            </div>
+        </section>
+    </div>
+
+    <div class="bottom-section">
+        <h2>Featured Products</h2>
+
+        <div class="review-card">
+            <img src="images/cheesecake.jpg" alt="Cheesecake" style="border-radius: 5px 5px 0 0;">
+            <div class="review-container">
+                <div class="stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <h4>Cheesecake</h4>
+                <p>Integer quis pharetra lectus, quis faucibus lacus. Nam vehicula tempor metus sed consequat.</p>
+            </div>
+        </div>
+        
+        <div class="review-card">
+            <img src="images/croissant.jpg" alt="Croissant" style="border-radius: 5px 5px 0 0;">
+            <div class="review-container">
+                <div class="stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <h4>Croissant</h4>
+                <p>Integer quis pharetra lectus, quis faucibus lacus. Nam vehicula tempor metus sed consequat.</p>
+            </div>
+        </div>
+        
+        <div class="review-card">
+            <img src="images/beefrollcake.jpg" alt="Beef Roll Cake" style="border-radius: 5px 5px 0 0;">
+            <div class="review-container">
+                <div class="stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half"></i>
+                </div>
+                <h4>Shredded Beef Roll Cake</h4>
+                <p>Integer quis pharetra lectus, quis faucibus lacus. Nam vehicula tempor metus sed consequat.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Dear Bakery. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // ========================================
+        // VANILLA JAVASCRIPT EVENTS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const topSection = document.querySelector('.top-section');
+            const specialItems = document.querySelectorAll('.special-item');
+            const reviewCards = document.querySelectorAll('.review-card');
+            const aboutImage = document.getElementById('aboutImage');
+            const keypressIndicator = document.getElementById('keypressIndicator');
+
+            // EVENT 1: MOUSEMOVE - Parallax effect on hero section
+            document.addEventListener('mousemove', function(e) {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.02;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.02;
+                topSection.style.transform = 'none';
+                
+                console.log('🖱️ Mousemove: X=' + e.clientX + ', Y=' + e.clientY);
+            });
+
+            // EVENT 2: CLICK - Special items interaction
+            specialItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const itemName = this.getAttribute('data-item');
+                    console.log('🖱️ Click event (Vanilla JS): ' + itemName + ' selected');
+                    
+                    this.style.backgroundColor = '#fff8e1';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 500);
+                });
+            });
+
+            // EVENT 3: KEYPRESS - Quick navigation
+            let keypressTimer;
+            document.addEventListener('keypress', function(e) {
+                console.log('⌨️ Keypress event (Vanilla JS): ' + e.key);
+                
+                keypressIndicator.textContent = 'Key pressed: ' + e.key.toUpperCase();
+                keypressIndicator.classList.add('show');
+                
+                clearTimeout(keypressTimer);
+                keypressTimer = setTimeout(() => {
+                    keypressIndicator.classList.remove('show');
+                }, 1000);
+            });
+
+            // EVENT 4: FOCUS - About image focus effect
+            aboutImage.setAttribute('tabindex', '0');
+            aboutImage.addEventListener('focus', function() {
+                console.log('🎯 Focus event (Vanilla JS): About image focused');
+                this.style.boxShadow = '0 0 20px rgba(201, 166, 107, 0.8)';
+            });
+
+            aboutImage.addEventListener('blur', function() {
+                this.style.boxShadow = '';
+            });
+
+            // EVENT 5: CHANGE - Review card interaction
+            reviewCards.forEach((card, index) => {
+                card.addEventListener('mouseenter', function() {
+                    console.log('🔄 Change event (Vanilla JS): Review card ' + (index + 1) + ' hovered');
+                });
+            });
+        });
+
+        // ========================================
+        // JQUERY EVENTS
+        // ========================================
+        $(document).ready(function() {
+            console.log('✅ Home Page - jQuery Loaded!');
+
+            // jQuery CLICK event - Review cards
+            $('.review-card').on('click', function() {
+                const productName = $(this).find('h4').text();
+                console.log('🖱️ Click event (jQuery): ' + productName + ' card clicked');
+                
+                $(this).css('transform', 'scale(0.95)');
+                setTimeout(() => {
+                    $(this).css('transform', '');
+                }, 200);
+            });
+
+            // jQuery MOUSEMOVE - Content wrapper parallax
+            $('.content-wrapper').on('mousemove', function(e) {
+                const x = e.pageX - $(this).offset().left;
+                const y = e.pageY - $(this).offset().top;
+                
+                $('.about-section, .specials-section').css({
+                    'transform': `translate(${x * 0.01}px, ${y * 0.01}px)`
+                });
+            });
+
+            // jQuery FOCUS - Input-like behavior simulation
+            $('.btn').on('focus', function() {
+                console.log('🎯 Focus event (jQuery): Button focused - ' + $(this).text());
+                $(this).css({
+                    'outline': '2px solid #c9a66b',
+                    'outline-offset': '3px'
+                });
+            }).on('blur', function() {
+                $(this).css('outline', 'none');
+            });
+
+            // jQuery CHANGE - Star rating hover effect
+            $('.stars').hover(
+                function() {
+                    console.log('🔄 Change event (jQuery): Stars hovered');
+                    $(this).css('transform', 'scale(1.2)');
+                },
+                function() {
+                    $(this).css('transform', 'scale(1)');
+                }
+            );
+
+            // jQuery KEYPRESS - Search simulation
+            let searchBuffer = '';
+            let searchTimer;
+            
+            $(document).on('keypress', function(e) {
+                if (e.key.match(/[a-zA-Z]/)) {
+                    searchBuffer += e.key;
+                    console.log('⌨️ Keypress event (jQuery): Search buffer = ' + searchBuffer);
+                    
+                    clearTimeout(searchTimer);
+                    searchTimer = setTimeout(() => {
+                        searchBuffer = '';
+                    }, 2000);
+                }
+            });
+
+            // Smooth scroll to sections
+            $('.btn').on('click', function(e) {
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
