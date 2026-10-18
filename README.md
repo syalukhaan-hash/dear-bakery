@@ -196,3 +196,5 @@ The browser may request `/favicon.ico`. If no favicon file exists, Nginx may ret
 - This is a static website built with HTML and CSS.
 - It does not currently use a database or backend application.
 - Environment variables are not required for the current setup.
+
+- Docker assignment updated by Radella Hafiza
