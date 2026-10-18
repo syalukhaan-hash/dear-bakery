@@ -198,3 +198,5 @@ The browser may request `/favicon.ico`. If no favicon file exists, Nginx may ret
 - Environment variables are not required for the current setup.
 
 - Docker assignment updated by Radella Hafiza
+
+- Docker assignment updated by Dian Fifi Nabilla
